@@ -14,17 +14,17 @@ import java.sql.SQLException;
 
 public class DBUtils {
 
-    private static final String driver = "com.mysql.jdbc.Driver";
 
-    private static final String url = "jdbc:mysql://localhost:3306/santaba?useUnicode=true&characterEncoding=UTF-8";
+    public static String driver;
 
-    private static final String username = "root";
-    private static final String password = "";
+    public static String url;
 
-    private static Connection conn = null;
+    public static String username;
+    public static String password;
 
-    //静态代码块负责加载驱动
-    static {
+
+    //加载驱动
+    public static void loadDriver() {
         try {
             Class.forName(driver);
         } catch (Exception ex) {
@@ -70,4 +70,11 @@ public class DBUtils {
         }
 
     }
+
+    //public static void configure(String driver, String url, String username, String password) {
+    //    DBUtils.driver = driver;
+    //    DBUtils.url = url;
+    //    DBUtils.username = username;
+    //    DBUtils.password = password;
+    //}
 }

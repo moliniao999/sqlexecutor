@@ -1,3 +1,5 @@
+import utils.DBUtils;
+
 /**
  * @program: sqlexecutor
  * @description:
@@ -7,16 +9,27 @@
 public class Main {
 
 
-
     public static void main(String[] args) throws SqlExecutorException, InterruptedException {
+        //System.out.println(System.getProperty("user.dir"));//user.dir指定了当前的路径
         String path = "/Users/weili/IdeaProjects/home/sqlexecutor/sql";
-        path = "sql";
-        System.out.println(System.getProperty("user.dir"));//user.dir指定了当前的路径
+        int threadNum = 3;
+        int loopNum = 1;
+        int loopDelayTime = 50;
 
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/santaba?useUnicode=true&characterEncoding=UTF-8";
+        String username = "root";
+        String password = "";
+
+
+        /** ---------- */
+        //初始化数据源
+        initDBUtils(driver, url, username, password);
+        //设置执行计划
         TestPlan testPlan = new TestPlan();
-        testPlan.setThreadNum(3);
-        testPlan.setLoopNum(1);
-        testPlan.setLoopDelayTime(50);
+        testPlan.setThreadNum(threadNum);
+        testPlan.setLoopNum(loopNum);
+        testPlan.setLoopDelayTime(loopDelayTime);
         testPlan.initSqlCache(path);
         //初始化sql执行器
         SqlExecutor executor = new RandomSqlExecutor();
@@ -27,10 +40,13 @@ public class Main {
 
     }
 
-
-
-
-
+    private static void initDBUtils(String driver, String url, String username, String password) {
+        DBUtils.driver = driver;
+        DBUtils.url = url;
+        DBUtils.username = username;
+        DBUtils.password = password;
+        DBUtils.loadDriver();
+    }
 
 
 }

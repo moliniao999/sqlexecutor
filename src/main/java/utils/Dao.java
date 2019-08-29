@@ -12,7 +12,6 @@ import java.util.List;
  **/
 public class Dao {
 
-    private static Connection conn = null;
 
     private static PreparedStatement pst = null;
 

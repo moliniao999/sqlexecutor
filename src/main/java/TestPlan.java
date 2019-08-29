@@ -9,6 +9,8 @@ import java.util.List;
  * @create: 2019-08-29 14:06
  **/
 public class TestPlan {
+
+    private String name;
     private  int threadNum = 2;     //线程数
     private int loopNum = 1;       //循环次数
     private int loopDelayTime = 50; //循环间隔时间,单位毫秒
