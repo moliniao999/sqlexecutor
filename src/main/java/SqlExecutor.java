@@ -6,6 +6,10 @@
  **/
 public interface SqlExecutor {
 
+    void configure(TestPlan testPlan);
 
-    public void execute();
+    void execute() throws SqlExecutorException, InterruptedException;
+
+    void stop();
+
 }

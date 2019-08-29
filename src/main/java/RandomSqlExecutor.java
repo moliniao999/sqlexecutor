@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Date;
 
 /**
  * @program: sqlexecutor
@@ -8,52 +6,48 @@ import java.util.concurrent.Executors;
  * @author: weili
  * @create: 2019-08-28 13:31
  **/
-public class RandomSqlExecutor implements SqlExecutor{
+public class RandomSqlExecutor implements SqlExecutor,Runnable {
 
 
-    private List<Client> clients;
+    public TestPlan testPlan;
 
-    private ExecutorService executorService;
+    public volatile boolean running;
 
-
-
-
-    public RandomSqlExecutor(List<Client> clients) {
-        this.clients = clients;
-        this.executorService = Executors.newFixedThreadPool(clients.size());
+    public TestPlan getTestPlan() {
+        return testPlan;
     }
 
-    public void execute() {
+    @Override
+    public void configure(TestPlan testPlan) {
+        this.testPlan = testPlan;
+    }
 
-        for (Client client : clients) {
-            executorService.execute(client);
+    public void execute() throws SqlExecutorException, InterruptedException {
+
+        long now = System.currentTimeMillis();
+        System.out.println("Starting the test on localhost " + " @ " + new Date(now) + " (" + now + ")");
+
+        running = true;
+        Thread thread = new Thread(new ThreadGroup(this));
+        thread.start();
+        //等待执行结束
+        thread.join();
+        System.out.println("主线程执行结束");
+
+    }
+
+    @Override
+    public void stop() {
+        if (running) {
+            running = false;
+            Thread stopThread = new Thread(this);
+            stopThread.start();
         }
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("CyclicBarrier重用");
+    }
 
 
-        for (Client client : clients) {
-            executorService.execute(client);
-        }
+    @Override
+    public void run() {
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("CyclicBarrier重用");
-
-
-        for (Client client : clients) {
-            executorService.execute(client);
-        }
-
-
-        executorService.shutdown();
     }
 }

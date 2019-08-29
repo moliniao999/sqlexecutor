@@ -1,0 +1,2 @@
+update user set age=11 where id=1;
+update user set age=21 where id=2;
