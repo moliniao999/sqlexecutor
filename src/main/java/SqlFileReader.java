@@ -1,4 +1,5 @@
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +13,10 @@ import java.util.*;
  * @author: weili
  * @create: 2019-08-28 13:35
  **/
-@Slf4j
+
 public class SqlFileReader {
+
+    private static Logger log = LoggerFactory.getLogger(SqlFileReader.class);
 
     /***
      * 获取指定目录下的所有的文件（不包括文件夹）
@@ -73,5 +76,18 @@ public class SqlFileReader {
 
 
 
+    /**
+     * 加载sql文件数据
+     * @param path
+     */
+    public static List<List<String>/*sql list*/> initSqlCache(String path) {
+        List<List<String>/*sql list*/> sqlReqList = new ArrayList<>();//存放sql集合
+        List<File> files = SqlFileReader.getListFiles(path);
+        files.forEach(file -> {
+            List<String> sqls = SqlFileReader.readFileIntoList(file.getAbsolutePath());
+            sqlReqList.add(sqls);
+        });
+        return sqlReqList;
+    }
 
 }

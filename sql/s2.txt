@@ -1,1 +1,1 @@
-update user set age=22 where id=2;
+update user set age=22 where id=8;

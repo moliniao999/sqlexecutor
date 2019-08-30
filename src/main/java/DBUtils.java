@@ -6,15 +6,16 @@
  * @author: weili
  * @create: 2019-08-28 10:03
  **/
-
-
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-@Slf4j
+
 public class DBUtils {
+
+    private static Logger log = LoggerFactory.getLogger(DBUtils.class);
 
     public static String driver;
     public static String url;

@@ -1,5 +1,5 @@
-import lombok.extern.slf4j.Slf4j;
-import utils.Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,14 +12,15 @@ import java.util.Random;
  * @author: weili
  * @create: 2019-08-28 15:00
  **/
-@Slf4j
+
 public class ClientThread implements Runnable {
+    Logger log = LoggerFactory.getLogger(ClientThread.class);
 
     String name;
     Connection conn;
-    List<String> sqls;
+    List<String> req;
     Dao dao = new Dao();
-
+    Random random = new Random();
 
     public String getName() {
         return name;
@@ -37,12 +38,12 @@ public class ClientThread implements Runnable {
         this.conn = conn;
     }
 
-    public List<String> getSqls() {
-        return sqls;
+    public List<String> getReq() {
+        return req;
     }
 
-    public void setSqls(List<String> sqls) {
-        this.sqls = sqls;
+    public void setReq(List<String> req) {
+        this.req = req;
     }
 
     public Dao getDao() {
@@ -53,10 +54,9 @@ public class ClientThread implements Runnable {
         this.dao = dao;
     }
 
-    public ClientThread(String name, Connection conn, List<String> sqls) {
+    public ClientThread(String name, List<String> req) {
         this.name = name;
-        this.conn = conn;
-        this.sqls = sqls;
+        this.req = req;
 
     }
 
@@ -65,26 +65,25 @@ public class ClientThread implements Runnable {
         try {
 
             //Main.getCyclicBarrier().await();
-            log.info("Thread:" + Thread.currentThread().getName() + "准备完毕,time:" + System.currentTimeMillis());
+            log.info("Thread:" + Thread.currentThread().getName() + "开始执行,time:" + System.currentTimeMillis());
+            Thread.sleep(random.nextInt(5));
 
+            conn = DBUtils.openConnection();
 
-
-            Random random = new Random();
-            for (String sql : sqls) {
-
-                //Thread.sleep(random.nextInt(100));
-                //log.info("客户端开始执行sql开始: client = " + name +", sql = " + sql);
+            for (String sql : req) {
+                log.info("客户端开始执行sql开始: client = " + name +", sql = " + sql);
                 dao.update(sql, conn);
-                log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
+                //log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
+                Thread.sleep(random.nextInt(5));
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行错误",e);
         }finally {
             try {
                 Dao.release(null, null, conn);
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("释放连接错误",e);
             }
         }
     }

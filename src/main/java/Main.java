@@ -1,4 +1,3 @@
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @program: sqlexecutor
@@ -7,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
  * @create: 2019-08-28 14:38
  **/
 
-@Slf4j
 public class Main {
 
 
@@ -19,9 +17,9 @@ public class Main {
         String username = "root";
         String password = "";
 
-        int threadNum = 3;
-        int loopNum = 1;
-        int loopDelayTime = 50;
+        int threadNum = 2;
+        int loopNum = 3;
+        int loopDelayTime = 500;
         String path = "sql";
 
         /** ---------- */
@@ -34,7 +32,7 @@ public class Main {
         testPlan.setLoopDelayTime(loopDelayTime);
         testPlan.initSqlCache(path);
         //初始化sql执行器
-        SqlExecutor executor = new RandomSqlExecutor();
+        SqlExecutor executor = new StandardSqlExecutor();
         executor.configure(testPlan);
         //执行sql
         executor.execute();

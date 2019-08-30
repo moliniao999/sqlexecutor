@@ -1,6 +1,7 @@
-package utils;
 
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ import java.util.List;
  * @author: weili
  * @create: 2019-08-28 10:11
  **/
-@Slf4j
 public class Dao {
 
+    Logger log = LoggerFactory.getLogger(Dao.class);
 
     private static PreparedStatement pst = null;
 
@@ -60,6 +61,8 @@ public class Dao {
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("sql执行错误", e);
+            throw new SqlExecutorException("sql执行错误");
         }finally{
             release(null, ps, null);
         }

@@ -15,7 +15,7 @@ public class TestPlan {
     private int loopNum = 1;       //循环次数
     private int loopDelayTime = 50; //循环间隔时间,单位毫秒
 
-    private List<List<String>/*sql list*/> sqlCache = new ArrayList<>();//存放sql集合
+    private List<List<String>/*sql list*/> sqlRequest = new ArrayList<>();//存放sql集合
 
 
     public int getThreadNum() {
@@ -36,12 +36,12 @@ public class TestPlan {
 
 
 
-    public List<List<String>> getSqlCache() {
-        return sqlCache;
+    public List<List<String>> getSqlRequest() {
+        return sqlRequest;
     }
 
-    public void setSqlCache(List<List<String>> sqlCache) {
-        this.sqlCache = sqlCache;
+    public void setSqlRequest(List<List<String>> sqlRequest) {
+        this.sqlRequest = sqlRequest;
     }
 
     public int getLoopDelayTime() {
@@ -60,7 +60,7 @@ public class TestPlan {
         List<File> files = SqlFileReader.getListFiles(path);
         files.forEach(file -> {
             List<String> sqls = SqlFileReader.readFileIntoList(file.getAbsolutePath());
-            sqlCache.add(sqls);
+            sqlRequest.add(sqls);
         });
     }
 }
