@@ -1,3 +1,5 @@
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +12,8 @@ import java.util.*;
  * @author: weili
  * @create: 2019-08-28 13:35
  **/
+@Slf4j
 public class SqlFileReader {
-
-
 
     /***
      * 获取指定目录下的所有的文件（不包括文件夹）
@@ -61,10 +62,10 @@ public class SqlFileReader {
                 bufferedReader.close();
                 read.close();
             } else {
-                System.out.println("找不到指定的文件");
+                log.info("找不到指定的文件");
             }
         } catch (Exception e) {
-            System.out.println("读取文件内容错误");
+            log.info("读取文件内容错误");
             e.printStackTrace();
         }
         return list;

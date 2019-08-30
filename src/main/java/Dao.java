@@ -1,5 +1,7 @@
 package utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
  * @author: weili
  * @create: 2019-08-28 10:11
  **/
+@Slf4j
 public class Dao {
 
 
@@ -36,7 +39,7 @@ public class Dao {
                 int id = rs.getInt("id");
                 String uuid = rs.getString("id");
                 String name = rs.getString("name");
-                System.out.println("id = " + id + ", name = " + name);
+                log.info("id = " + id + ", name = " + name);
             }
         } catch (Exception e) {
             e.printStackTrace();

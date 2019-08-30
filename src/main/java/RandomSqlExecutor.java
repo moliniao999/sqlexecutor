@@ -1,4 +1,4 @@
-import utils.DBUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
  * @author: weili
  * @create: 2019-08-28 13:31
  **/
+@Slf4j
 public class RandomSqlExecutor implements SqlExecutor, Runnable {
 
 
@@ -26,16 +27,16 @@ public class RandomSqlExecutor implements SqlExecutor, Runnable {
     }
 
     @Override
-    public void execute() throws SqlExecutorException, InterruptedException {
+    public void execute() throws InterruptedException {
 
         long now = System.currentTimeMillis();
-        System.out.println("Starting the test on localhost " + " @ " + new Date(now) + " (" + now + ")");
+        log.info("Starting the test on localhost " + " @ " + new Date(now) + " (" + now + ")");
 
         Thread thread = new Thread(this);
         thread.start();
         //等待执行结束
         thread.join();
-        System.out.println("主线程执行结束");
+        log.info("主线程执行结束");
 
     }
 
@@ -57,7 +58,7 @@ public class RandomSqlExecutor implements SqlExecutor, Runnable {
                     mod = i % sqlCache.size();
                     sqls = sqlCache.get(mod);
                     if (sqls == null || sqls.isEmpty()) {
-                        System.out.println("sql is empty");
+                        log.info("sql is empty");
                         continue;
                     }
                     ClientThread client = new ClientThread("loop" + j + ", client" + i, DBUtils.openConnection(), sqls);

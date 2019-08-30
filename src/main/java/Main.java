@@ -1,4 +1,4 @@
-import utils.DBUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @program: sqlexecutor
@@ -6,21 +6,23 @@ import utils.DBUtils;
  * @author: weili
  * @create: 2019-08-28 14:38
  **/
+
+@Slf4j
 public class Main {
 
 
-    public static void main(String[] args) throws SqlExecutorException, InterruptedException {
-        //System.out.println(System.getProperty("user.dir"));//user.dir指定了当前的路径
-        String path = "/Users/weili/IdeaProjects/home/sqlexecutor/sql";
-        int threadNum = 3;
-        int loopNum = 1;
-        int loopDelayTime = 50;
-
+    public static void main(String[] args) throws InterruptedException {
+        //log.info(System.getProperty("user.dir"));//user.dir指定了当前的路径
+        //String path = "/Users/weili/IdeaProjects/home/sqlexecutor/sql";
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/santaba?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String password = "";
 
+        int threadNum = 3;
+        int loopNum = 1;
+        int loopDelayTime = 50;
+        String path = "sql";
 
         /** ---------- */
         //初始化数据源

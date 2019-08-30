@@ -1,29 +1,62 @@
-/**
- * @program: sqlexecutor
- * @description:
- * @author: weili
- * @create: 2019-08-29 14:11
- **/
-public class SqlExecutorException extends Exception {
+/*
+ * Copyright (c) 2014 www.diligrp.com All rights reserved.
+ * 本软件源代码版权归----所有,未经许可不得任意复制与传播.
+ */
 
 
-    public SqlExecutorException(){
+public class SqlExecutorException extends RuntimeException{
+	private String code;
+	private String errorData;
+	public SqlExecutorException() {
+		super();
+	}
 
-        super();
+	public SqlExecutorException(String message) {
+		super(message);
+	}
+
+	public SqlExecutorException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public SqlExecutorException(Throwable cause) {
+		super(cause);
+	}
+
+	public SqlExecutorException(String code, String message) {
+	    super(message);
+	    this.code=code;
     }
 
-    public SqlExecutorException(String message){
+	public SqlExecutorException(String code, String errorData, String message) {
         super(message);
-
+        this.code=code;
+        this.errorData=errorData;
+    }
+	
+	
+    public String getCode() {
+        return code;
     }
 
-    public SqlExecutorException(String message, Throwable cause){
-
-        super(message,cause);
+    public void setCode(String code) {
+        this.code = code;
+    }
+    
+    
+    public String getErrorData() {
+        return errorData;
     }
 
-    public SqlExecutorException(Throwable cause) {
+    
+    public void setErrorData(String errorData) {
+        this.errorData = errorData;
+    }
 
-        super(cause);
+    @Override
+    public String toString() {
+        return "AppException [code=" + getCode() + ", errorData="
+                + getErrorData() + ", message=" + getMessage()
+                + ", cause=" + getCause() + "]";
     }
 }

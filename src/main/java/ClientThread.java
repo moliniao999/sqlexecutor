@@ -1,3 +1,4 @@
+import lombok.extern.slf4j.Slf4j;
 import utils.Dao;
 
 import java.sql.Connection;
@@ -11,6 +12,7 @@ import java.util.Random;
  * @author: weili
  * @create: 2019-08-28 15:00
  **/
+@Slf4j
 public class ClientThread implements Runnable {
 
     String name;
@@ -63,7 +65,7 @@ public class ClientThread implements Runnable {
         try {
 
             //Main.getCyclicBarrier().await();
-            System.out.println("Thread:" + Thread.currentThread().getName() + "准备完毕,time:" + System.currentTimeMillis());
+            log.info("Thread:" + Thread.currentThread().getName() + "准备完毕,time:" + System.currentTimeMillis());
 
 
 
@@ -71,9 +73,9 @@ public class ClientThread implements Runnable {
             for (String sql : sqls) {
 
                 //Thread.sleep(random.nextInt(100));
-                //System.out.println("客户端开始执行sql开始: client = " + name +", sql = " + sql);
+                //log.info("客户端开始执行sql开始: client = " + name +", sql = " + sql);
                 dao.update(sql, conn);
-                System.out.println("客户端开始执行sql结束: client = " + name +", sql = " + sql);
+                log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
             }
 
         } catch (Exception e) {

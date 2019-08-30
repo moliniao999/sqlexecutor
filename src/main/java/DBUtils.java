@@ -1,4 +1,4 @@
-package utils;
+
 
 /**
  * @program: sqlexecutor
@@ -8,20 +8,18 @@ package utils;
  **/
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+@Slf4j
 public class DBUtils {
 
-
     public static String driver;
-
     public static String url;
-
     public static String username;
     public static String password;
-
 
     //加载驱动
     public static void loadDriver() {
@@ -41,15 +39,14 @@ public class DBUtils {
     //    return conn;
     //}
 
-    public static Connection openConnection() {
+    public static Connection openConnection() throws Exception {
 
         Connection conn = null; //连接数据库
         try {
             conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("获取连接失败");
-            return null;
+            log.info("获取数据库连接失败",e);
+            throw new Exception("获取数据库连接失败");
         }
 
         return conn;
@@ -61,20 +58,13 @@ public class DBUtils {
             Connection conn = DBUtils.openConnection();
 
             if (conn != null) {
-                System.out.println("数据库连接正常！");
+                log.info("数据库连接正常！");
             } else {
-                System.out.println("数据库连接异常！");
+                log.info("数据库连接异常！");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
-    //public static void configure(String driver, String url, String username, String password) {
-    //    DBUtils.driver = driver;
-    //    DBUtils.url = url;
-    //    DBUtils.username = username;
-    //    DBUtils.password = password;
-    //}
 }
