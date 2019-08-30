@@ -17,14 +17,14 @@ public class Main {
         String username = "root";
         String password = "";
 
-        int threadNum = 2;
-        int loopNum = 3;
-        int loopDelayTime = 500;
+        int threadNum = 100;
+        int loopNum = 100;
+        int loopDelayTime = 50;
         String path = "sql";
 
         /** ---------- */
         //初始化数据源
-        initDBUtils(driver, url, username, password);
+        DBUtils.config(driver, url, username, password);
         //设置执行计划
         TestPlan testPlan = new TestPlan();
         testPlan.setThreadNum(threadNum);
@@ -34,18 +34,9 @@ public class Main {
         //初始化sql执行器
         SqlExecutor executor = new StandardSqlExecutor();
         executor.configure(testPlan);
-        //执行sql
+        //执行任务
         executor.execute();
 
-
-    }
-
-    private static void initDBUtils(String driver, String url, String username, String password) {
-        DBUtils.driver = driver;
-        DBUtils.url = url;
-        DBUtils.username = username;
-        DBUtils.password = password;
-        DBUtils.loadDriver();
     }
 
 

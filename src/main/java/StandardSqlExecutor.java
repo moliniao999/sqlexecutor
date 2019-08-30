@@ -2,6 +2,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,7 +14,7 @@ import java.util.concurrent.Executors;
  * @create: 2019-08-28 13:31
  **/
 
-public class StandardSqlExecutor implements SqlExecutor, Runnable {
+public class StandardSqlExecutor implements SqlExecutor {
 
     Logger log = LoggerFactory.getLogger(StandardSqlExecutor.class);
 
@@ -26,6 +28,8 @@ public class StandardSqlExecutor implements SqlExecutor, Runnable {
 
     public ExecutorService executor = Executors.newCachedThreadPool();
 
+    public static Map<String,List<String>> result = new ConcurrentHashMap<>();
+
     @Override
     public void configure(TestPlan testPlan) {
         this.testPlan = testPlan;
@@ -36,19 +40,6 @@ public class StandardSqlExecutor implements SqlExecutor, Runnable {
 
         long start = System.currentTimeMillis();
         log.info("Starting the test on localhost " + " @ " + start );
-
-        Thread thread = new Thread(this);
-        thread.start();
-        //////等待执行结束
-        //thread.join();
-        //
-        //long end = System.currentTimeMillis();
-        //System.out.println("子线程执行时长：" + (end - start));
-    }
-
-
-    @Override
-    public void run() {
 
         running = true;
         try {
@@ -78,7 +69,7 @@ public class StandardSqlExecutor implements SqlExecutor, Runnable {
             log.error("执行错误",e);
             stop();
         }
-
+        //System.out.println("子线程执行时长：" + (end - start));
     }
 
     @Override

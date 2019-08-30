@@ -67,13 +67,11 @@ public class ClientThread implements Runnable {
             //Main.getCyclicBarrier().await();
             log.info("Thread:" + Thread.currentThread().getName() + "开始执行,time:" + System.currentTimeMillis());
             Thread.sleep(random.nextInt(5));
-
             conn = DBUtils.openConnection();
 
             for (String sql : req) {
-                log.info("客户端开始执行sql开始: client = " + name +", sql = " + sql);
                 dao.update(sql, conn);
-                //log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
+                log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
                 Thread.sleep(random.nextInt(5));
             }
 

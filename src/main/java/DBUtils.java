@@ -6,45 +6,43 @@
  * @author: weili
  * @create: 2019-08-28 10:03
  **/
+
+import com.alibaba.druid.pool.DruidDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtils {
 
     private static Logger log = LoggerFactory.getLogger(DBUtils.class);
 
-    public static String driver;
-    public static String url;
-    public static String username;
-    public static String password;
+    private static DruidDataSource druidDataSource = null;
 
-    //加载驱动
-    public static void loadDriver() {
-        try {
-            Class.forName(driver);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
+    public static void config(String driver, String url, String username, String password) {
+        //DBUtils.loadDriver();
+        druidDataSource = new DruidDataSource();
+        druidDataSource.setDriverClassName(driver);
+        druidDataSource.setUrl(url);
+        druidDataSource.setUsername(username);
+        druidDataSource.setPassword(password);
+        druidDataSource.setInitialSize(5);
+        druidDataSource.setMinIdle(1);
+        druidDataSource.setMaxActive(100);
+        druidDataSource.setMaxWait(60000);
+        druidDataSource.setTestOnBorrow(false);
+        druidDataSource.setTestOnReturn(false);
+        druidDataSource.setTestWhileIdle(true);
+        druidDataSource.setPoolPreparedStatements(false);
     }
-    //
-    ////单例模式返回数据库连接对象，供外部调用
-    //public static Connection getConnection() throws Exception {
-    //    if (conn == null) {
-    //        conn = DriverManager.getConnection(url, username, password); //连接数据库
-    //        return conn;
-    //    }
-    //    return conn;
-    //}
 
     public static Connection openConnection() throws Exception {
 
         Connection conn = null; //连接数据库
         try {
-            conn = DriverManager.getConnection(url, username, password);
+            conn = druidDataSource.getConnection();
         } catch (SQLException e) {
             log.info("获取数据库连接失败",e);
             throw new Exception("获取数据库连接失败");

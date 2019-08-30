@@ -35,13 +35,6 @@ public class Dao {
             //执行sql
             rs = pst.executeQuery();
 
-            // 遍历处理结果集
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String uuid = rs.getString("id");
-                String name = rs.getString("name");
-                log.info("id = " + id + ", name = " + name);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -51,40 +44,41 @@ public class Dao {
     }
 
 
-    public void update(String sql, Connection conn) throws Exception{
+    public int update(String sql, Connection conn) throws Exception {
 
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement(sql);
 
             //执行sql语句
-            ps.executeUpdate();
+            int effect = ps.executeUpdate();
+            return effect;
         } catch (Exception e) {
             e.printStackTrace();
             log.error("sql执行错误", e);
             throw new SqlExecutorException("sql执行错误");
-        }finally{
+        } finally {
             release(null, ps, null);
         }
     }
 
-    public static void release(ResultSet rs,Statement statement, Connection con) throws SQLException{
+    public static void release(ResultSet rs, Statement statement, Connection con) throws SQLException {
         /**
          * 释放资源
          */
         try {
-            if(rs != null)
+            if (rs != null)
                 rs.close();
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         try {
-            if(statement != null)
+            if (statement != null)
                 statement.close();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
-            if(con != null)
+        } finally {
+            if (con != null)
                 con.close();
         }
     }
