@@ -60,11 +60,14 @@ client1：update X set a=6 where id=2;
 
 
 ## 运行项目
-采用java语言实现,需要java运行环境,启动执行:
+1.启动数据库mysql或tidb,确保sql文件中的表在数据库中存在.
+2.采用java语言实现,需要java 1.8 运行环境，启动执行:
 
  ``` 
   $ java -jar bin/sqlexecutor-1.0-SNAPSHOT.jar 
 ```
+
+
 ## 实现
 
 采用比较简单的方式实现上述功能，并发启动多个客户端线程依次获取对应sql执行数据库操作，主要利用CPU调度线程的随机性来实现sql执行的随机性。
