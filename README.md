@@ -76,7 +76,7 @@ client1：update X set a=6 where id=2;
  - loopNum         循环次数，多次循环可覆盖所有执行顺序
  - loopDelayTime   循环间隔时间,单位毫秒。
  - sqlPath         sql文件存放路径,例如/sql目录下可存放多个sql文件。只会加载后缀为txt,sql的文件类型.
-组件：
+### 组件：
 * TestFrameStarter，程序入口，初始化swing窗口，用户录入必要的参数.
 * SqlExecutorListener , swing组件基于事件驱动，监听测试执行事件，具体参见actionPerformed()方法
 * StandardSqlExecutor， 根据测试计划,启动客户端线程(每个客户端依次对应每个sql文件的内容),利用线程池执行任务，避免过多的创建和销毁，执行完成后返回
