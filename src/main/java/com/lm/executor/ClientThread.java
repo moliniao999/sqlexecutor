@@ -1,9 +1,15 @@
+package com.lm.executor;
+
+import com.lm.util.DBUtils;
+import com.lm.util.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -18,9 +24,11 @@ public class ClientThread implements Runnable {
 
     String name;
     Connection conn;
-    List<String> req;
+    List<String> sqlList;
     Dao dao = new Dao();
     Random random = new Random();
+    //存放执行结果
+    public Map<String,List<Integer>> result;
 
     public String getName() {
         return name;
@@ -38,12 +46,12 @@ public class ClientThread implements Runnable {
         this.conn = conn;
     }
 
-    public List<String> getReq() {
-        return req;
+    public List<String> getSqlList() {
+        return sqlList;
     }
 
-    public void setReq(List<String> req) {
-        this.req = req;
+    public void setSqlList(List<String> sqlList) {
+        this.sqlList = sqlList;
     }
 
     public Dao getDao() {
@@ -54,32 +62,39 @@ public class ClientThread implements Runnable {
         this.dao = dao;
     }
 
-    public ClientThread(String name, List<String> req) {
+    public ClientThread(String name, List<String> sqlList,Map<String,List<Integer>> result) {
         this.name = name;
-        this.req = req;
-
+        this.sqlList = sqlList;
+        this.result = result;
     }
 
     @Override
     public void run() {
         try {
-
-            //Main.getCyclicBarrier().await();
-            log.info("Thread:" + Thread.currentThread().getName() + "开始执行,time:" + System.currentTimeMillis());
+            //随机休眠0-5毫秒,模拟真实场景
             Thread.sleep(random.nextInt(5));
+            //获取数据库连接
             conn = DBUtils.openConnection();
-
-            for (String sql : req) {
-                dao.update(sql, conn);
-                log.info("客户端开始执行sql结束: client = " + name +", sql = " + sql);
+            int effect = 0;
+            List<Integer> resultOfThread = new ArrayList<>();
+            for (String sql : sqlList) {
+                //暂不支持select语句
+                if (sql.trim().startsWith("select")) {
+                    continue;
+                }
+                effect = dao.update(sql, conn);
+                resultOfThread.add(effect);
+                //随机休眠0-5毫秒,模拟真实场景
                 Thread.sleep(random.nextInt(5));
             }
+            result.put(name, resultOfThread);
+            log.info("客户端开始执行sql结束: client = " + name +", sqlList = " + sqlList);
 
         } catch (Exception e) {
-            log.error("执行错误",e);
+            log.error("线程执行错误:{}",name,e);
         }finally {
             try {
-                Dao.release(null, null, conn);
+                DBUtils.release(null, null, conn);
             } catch (SQLException e) {
                 log.error("释放连接错误",e);
             }

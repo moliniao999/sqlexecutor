@@ -1,9 +1,13 @@
+package com.lm.util;
 
-
+import com.lm.exception.SqlExecutorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +42,7 @@ public class Dao {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            release(rs, pst, conn);
+            DBUtils.release(rs, pst, conn);
         }
         return list;
     }
@@ -58,30 +62,10 @@ public class Dao {
             log.error("sql执行错误", e);
             throw new SqlExecutorException("sql执行错误");
         } finally {
-            release(null, ps, null);
+            DBUtils.release(null, ps, null);
         }
     }
 
-    public static void release(ResultSet rs, Statement statement, Connection con) throws SQLException {
-        /**
-         * 释放资源
-         */
-        try {
-            if (rs != null)
-                rs.close();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        try {
-            if (statement != null)
-                statement.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (con != null)
-                con.close();
-        }
-    }
 
 }
 

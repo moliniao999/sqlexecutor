@@ -1,3 +1,8 @@
+package com.lm.executor;
+
+import com.lm.config.TestPlan;
+import com.lm.util.Result;
+
 /**
  * @program: sqlexecutor
  * @description:
@@ -8,7 +13,7 @@ public interface SqlExecutor {
 
     void configure(TestPlan testPlan);
 
-    void execute() throws InterruptedException;
+    Result execute() throws InterruptedException;
 
     void stop();
 

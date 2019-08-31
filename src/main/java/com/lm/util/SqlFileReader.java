@@ -1,3 +1,6 @@
+package com.lm.util;
+
+import com.lm.exception.SqlExecutorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -5,7 +8,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: sqlexecutor
@@ -17,6 +21,7 @@ import java.util.*;
 public class SqlFileReader {
 
     private static Logger log = LoggerFactory.getLogger(SqlFileReader.class);
+
 
     /***
      * 获取指定目录下的所有的文件（不包括文件夹）
@@ -31,7 +36,7 @@ public class SqlFileReader {
             directory = new File(obj.toString());
         }
         List<File> files = new ArrayList<File>();
-        if (directory.isFile()) {
+        if (directory.isFile()&&(directory.getName().endsWith("txt")||directory.getName().endsWith("sql"))) {
             files.add(directory);
             return files;
         } else if (directory.isDirectory()) {
@@ -46,7 +51,7 @@ public class SqlFileReader {
 
 
     /**
-     * 读取文件内容
+     * 读取sql文件内容
      * @param filePath
      * @return
      */
@@ -56,7 +61,7 @@ public class SqlFileReader {
             File file = new File(filePath);
             if (file.isFile() && file.exists()) { // 判断文件是否存在
                 InputStreamReader read = new InputStreamReader(
-                        new FileInputStream(file));
+                        new FileInputStream(file),"UTF-8");
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -68,26 +73,10 @@ public class SqlFileReader {
                 log.info("找不到指定的文件");
             }
         } catch (Exception e) {
-            log.info("读取文件内容错误");
-            e.printStackTrace();
+            log.info("读取文件内容错误",e);
+            throw new SqlExecutorException("读取文件内容错误");
         }
         return list;
-    }
-
-
-
-    /**
-     * 加载sql文件数据
-     * @param path
-     */
-    public static List<List<String>/*sql list*/> initSqlCache(String path) {
-        List<List<String>/*sql list*/> sqlReqList = new ArrayList<>();//存放sql集合
-        List<File> files = SqlFileReader.getListFiles(path);
-        files.forEach(file -> {
-            List<String> sqls = SqlFileReader.readFileIntoList(file.getAbsolutePath());
-            sqlReqList.add(sqls);
-        });
-        return sqlReqList;
     }
 
 }

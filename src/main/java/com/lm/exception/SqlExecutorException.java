@@ -1,11 +1,11 @@
-/*
+package com.lm.exception;/*
  * Copyright (c) 2014 www.diligrp.com All rights reserved.
  * 本软件源代码版权归----所有,未经许可不得任意复制与传播.
  */
 
 
 public class SqlExecutorException extends RuntimeException{
-	private String code;
+	private String code = "500";
 	private String errorData;
 	public SqlExecutorException() {
 		super();
@@ -55,8 +55,7 @@ public class SqlExecutorException extends RuntimeException{
 
     @Override
     public String toString() {
-        return "AppException [code=" + getCode() + ", errorData="
-                + getErrorData() + ", message=" + getMessage()
+        return "com.lm.exception.SqlExecutorException [code=" + getCode() + ", message=" + getMessage()
                 + ", cause=" + getCause() + "]";
     }
 }
