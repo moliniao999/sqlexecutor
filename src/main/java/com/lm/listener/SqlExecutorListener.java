@@ -1,6 +1,7 @@
 package com.lm.listener;
 
-import com.lm.config.TestPlan;
+import com.lm.config.Context;
+import com.lm.config.SqlTestPlan;
 import com.lm.exception.SqlExecutorException;
 import com.lm.executor.SqlExecutor;
 import com.lm.executor.StandardSqlExecutor;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,10 +66,10 @@ public class SqlExecutorListener implements ActionListener {
             //初始化数据源
             DBUtils.config(driver.getText().trim(), url.getText().trim(), username.getText().trim(), password.getText().trim());
             //设置执行计划
-            TestPlan testPlan = setTestPlan(tn, ln, ldt, sqlPath.getText().trim());
+            Context<SqlTestPlan> context = new Context<>(setTestPlan(tn, ln, ldt, sqlPath.getText().trim()));
             //执行任务
             executor = new StandardSqlExecutor();
-            executor.configure(testPlan);
+            executor.configure(context);
             Result result = executor.execute();
             //返回执行结果
             setOutPut(result);
@@ -89,31 +89,31 @@ public class SqlExecutorListener implements ActionListener {
     }
 
     private void setOutPut(Result result) {
-        Map<String/*thread name*/, List<Integer>/*result*/> data = (Map<String, List<Integer>>) result.getData();
+        Map<String/*thread name*/, String/*result*/> data = (Map<String, String>) result.getData();
         StringBuffer sb = new StringBuffer();
         if (data != null && !data.isEmpty()) {
             data.forEach((k,v) ->{
-                sb.append(k + ":" + v.toString()+"\n");
+                sb.append(k + ":" + v+"\n");
             });
         }
         output.setText("执行结束:"+"\n"+sb.toString());
     }
 
-    private TestPlan setTestPlan(int tn, int ln, int ldt, String path) {
-        TestPlan testPlan = new TestPlan();
+    private SqlTestPlan setTestPlan(int tn, int ln, int ldt, String path) {
+        SqlTestPlan sqlTestPlan = new SqlTestPlan();
         if (tn > 0) {
-            testPlan.setThreadNum(tn);
+            sqlTestPlan.setThreadNum(tn);
         }
         if (ln > 0) {
-            testPlan.setLoopNum(ln);
+            sqlTestPlan.setLoopNum(ln);
         }
         if (ldt > 0) {
-            testPlan.setLoopDelayTime(ldt);
+            sqlTestPlan.setLoopDelayTime(ldt);
         }
         if (path.length() != 0) {
-            testPlan.setPath(path);
+            sqlTestPlan.setPath(path);
         }
-        return testPlan;
+        return sqlTestPlan;
     }
 
     private boolean checkParams() {

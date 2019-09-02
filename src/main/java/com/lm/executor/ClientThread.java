@@ -1,5 +1,6 @@
 package com.lm.executor;
 
+import com.lm.exception.SqlExecutorException;
 import com.lm.util.DBUtils;
 import com.lm.util.Dao;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class ClientThread implements Runnable {
     Dao dao = new Dao();
     Random random = new Random();
     //存放执行结果
-    public Map<String,List<Integer>> result;
+    public Map<String, String> result;
 
     public String getName() {
         return name;
@@ -62,7 +63,7 @@ public class ClientThread implements Runnable {
         this.dao = dao;
     }
 
-    public ClientThread(String name, List<String> sqlList,Map<String,List<Integer>> result) {
+    public ClientThread(String name, List<String> sqlList, Map<String, String> result) {
         this.name = name;
         this.sqlList = sqlList;
         this.result = result;
@@ -87,17 +88,22 @@ public class ClientThread implements Runnable {
                 //随机休眠0-5毫秒,模拟真实场景
                 Thread.sleep(random.nextInt(5));
             }
-            result.put(name, resultOfThread);
-            log.info("客户端开始执行sql结束: client = " + name +", sqlList = " + sqlList);
+            result.put(name, resultOfThread.toString());
+            log.info("客户端开始执行sql结束: client = " + name + ", sqlList = " + sqlList);
 
+        } catch (SqlExecutorException e) {
+            log.error("客户端线程sql执行错误:{}", name, e);
+            result.put(name, e.getMessage());
         } catch (Exception e) {
-            log.error("线程执行错误:{}",name,e);
-        }finally {
+            log.error("客户端线程执行错误:{}", name, e);
+            result.put(name, e.getMessage());
+        } finally {
             try {
                 DBUtils.release(null, null, conn);
             } catch (SQLException e) {
-                log.error("释放连接错误",e);
+                log.error("释放连接错误", e);
             }
         }
     }
+
 }

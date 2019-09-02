@@ -1,6 +1,7 @@
 package com.lm.executor;
 
-import com.lm.config.TestPlan;
+import com.lm.config.Context;
+import com.lm.config.SqlTestPlan;
 import com.lm.exception.SqlExecutorException;
 import com.lm.util.Result;
 import com.lm.util.SqlFileReader;
@@ -24,7 +25,7 @@ public class StandardSqlExecutor implements SqlExecutor {
 
     Logger log = LoggerFactory.getLogger(StandardSqlExecutor.class);
 
-    public TestPlan testPlan;
+    public Context<SqlTestPlan> context;
 
     public static volatile boolean running;
 
@@ -36,15 +37,15 @@ public class StandardSqlExecutor implements SqlExecutor {
 
 
     //存放每个线程的执行结果
-    public Map<String/*thread name*/, List<Integer>/*result*/> data = new ConcurrentHashMap<>();
+    public Map<String/*thread name*/, String/*result*/> data = new ConcurrentHashMap<>();
 
-    public TestPlan getTestPlan() {
-        return testPlan;
+    public Context getContext() {
+        return context;
     }
 
     @Override
-    public void configure(TestPlan testPlan) {
-        this.testPlan = testPlan;
+    public void configure(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -59,10 +60,10 @@ public class StandardSqlExecutor implements SqlExecutor {
         running = true;
         try {
             //获取sql文件内容
-            sqlRequest = getSqlList(testPlan.getPath());
-            int threadNum = getTestPlan().getThreadNum();
-            int loopNum = getTestPlan().getLoopNum();
-            int loopDelayTime = getTestPlan().getLoopDelayTime();
+            sqlRequest = getSqlList(context.getTestPlan().getPath());
+            int threadNum = context.getTestPlan().getThreadNum();
+            int loopNum = context.getTestPlan().getLoopNum();
+            int loopDelayTime = context.getTestPlan().getLoopDelayTime();
             int mod;
             List<String> req;
             for (int j = 1; running && j <= loopNum; j++) {

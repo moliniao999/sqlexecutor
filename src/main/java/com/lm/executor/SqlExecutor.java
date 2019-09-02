@@ -1,6 +1,6 @@
 package com.lm.executor;
 
-import com.lm.config.TestPlan;
+import com.lm.config.Context;
 import com.lm.util.Result;
 
 /**
@@ -9,9 +9,9 @@ import com.lm.util.Result;
  * @author: weili
  * @create: 2019-08-28 13:31
  **/
-public interface SqlExecutor {
+public interface SqlExecutor<T> {
 
-    void configure(TestPlan testPlan);
+    void configure(Context<T> context);
 
     Result execute() throws InterruptedException;
 

@@ -61,12 +61,13 @@ client1：update X set a=6 where id=2;
 
 ## 运行项目
 1. 启动数据库mysql或tidb,确保sql文件中的表在数据库中存在.
-2. 采用java语言实现,需要java 1.8 运行环境，启动执行:
+2. 采用java语言实现,使用的java 1.8 运行环境,采用JDBC连接数据库，启动执行jar执行程序:
 
  ``` 
   $ java -jar bin/sqlexecutor-1.0-SNAPSHOT.jar 
 ```
-
+启动界面:
+![image](https://note.youdao.com/src/2BA349C3BA194EA7BC7AAC49CC0F0619)
 
 ## 实现
 
@@ -75,7 +76,7 @@ client1：update X set a=6 where id=2;
  - threadNum       执行线程数,模拟客户端。
  - loopNum         循环次数，多次循环可覆盖所有执行顺序
  - loopDelayTime   循环间隔时间,单位毫秒。
- - sqlPath         sql文件存放路径,例如/sql目录下可存放多个sql文件。只会加载后缀为txt,sql的文件类型.
+ - sqlPath         sql文件存放路径,例如/sql,只会加载后缀为txt,sql的文件类型,目录下可存放多个sql文件。
 ### 组件：
 * TestFrameStarter，程序入口，初始化swing窗口，用户录入必要的参数.
 * SqlExecutorListener , swing组件基于事件驱动，监听测试执行事件，具体参见actionPerformed()方法
@@ -85,4 +86,4 @@ client1：update X set a=6 where id=2;
 * SqlFileReader，负责读取文件内容
 * TestPlan 定义执行计划
 
-目前实现比较简陋，可改进和扩展的地方还很多
+实现比较简陋，可改进和扩展的地方还很多
