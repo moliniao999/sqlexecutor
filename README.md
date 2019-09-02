@@ -67,7 +67,7 @@ client1：update X set a=6 where id=2;
   $ java -jar bin/sqlexecutor-1.0-SNAPSHOT.jar 
 ```
 启动界面:
-![image](https://note.youdao.com/src/2BA349C3BA194EA7BC7AAC49CC0F0619)
+![image](http://note.youdao.com/yws/public/resource/d17f99c7973399986442664394ac2f34/2BA349C3BA194EA7BC7AAC49CC0F0619?ynotemdtimestamp=1567404399716)
 
 ## 实现
 
